@@ -1,0 +1,184 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #474e5d;
+}
+* {
+    box-sizing: border-box;
+}
+input[type=text] {
+    font-size: 2.5vh;
+    display: inline-block;
+    border: none;
+    border-radius: 1vh 1vh 1vh 1vh;
+    background: #bebebe;
+}
+
+input[type=text]:focus{
+    background-color: rgb(182, 179, 179);
+    font-size: 2.5vh;
+    border-radius: 1vh 1vh 1vh 1vh;
+    outline: none;
+}
+
+#id-submit{
+    color: white;
+    padding: 1.5vh 1vh 1.5vh 1vh ;
+    font-size: 2.4vh;
+    border: none;
+    cursor: pointer;
+    width: 12vh;
+    opacity: 0.9;
+    border-radius: 1vh;
+    border: 0.4vh outset #c0c0c0;
+}
+
+#id-container {
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    margin-left: auto;
+    margin-right: auto;
+    overflow: auto;
+    background-color: #474e5d;
+    padding-top: 10vh;
+
+}
+
+.container {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1vh;
+    background-color: #fefefe;
+    border: 0.5vh solid #888;
+    border-radius: 3vh;
+}
+
+#id-form{
+    width: 100%; 
+    font-size: 12px;
+    display: flex;
+}
+#id-input{
+    flex: 92%;
+    font-size: 20px;
+}
+#id-xml-json{
+    font-size: 18px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#id-submit{
+    flex: 8%;
+    font-size: 22px;
+    background-color: #474e5d;
+}
+#id-submit:active {
+    background-color: #bebebe;
+    transform: translateY(4px);
+  }
+/*Check XML JSON*/
+.checklabel{
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 18px;
+}
+.checklabel input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+.checklabel:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.checklabel input:checked ~ .checkmark {
+  background-color: #474e5d;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.checklabel input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.checklabel .checkmark:after {
+    top: 9px;
+    left: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
+}
+
+#id-reset{
+    height: 1vw;
+    margin-top: 1vh;
+    margin-bottom: 3vh;
+}
+#reset-button{
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    float:right;
+    width: 10vh;
+    opacity: 0.9;
+    border-radius: 1vh;
+    background-color: #474e5d;
+    border: 0.4vh outset #c0c0c0;
+}
+#action{
+    display: flex;
+    margin-top:3vh;
+    border: 0.5vh solid #888;
+    border-radius: 2vh;
+    background-color: #474e5d;
+    
+}
+#action-info{
+    flex: 40vh;
+    color: #E0E0E0;
+    font-size: 2vh;
+    font-family: verdana;
+    border-radius: 2vh 0vh 0vh 2vh;
+    background-color : #333333;
+}
+#action-html{
+    flex: 60vh;
+    padding-left: 22%;
+    border-radius: 0vh 2vh 2vh 0vh;
+    background-color: #FFFFFF;
+}
+#id-response{
+    padding-left: 35%;
+}
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 2vh;
+}
+

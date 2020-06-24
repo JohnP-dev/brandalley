@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FluxController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<div id="id-container">
+    <div class="container">
+        <form id = "id-form" action="" method="post">
+            <input  id = "id-input" value ="{{response[1]}}" type="text" placeholder="Enter the page (XML or JSON) URL" name="url" required>
+            <div id="id-xml-json">
+                <label class="checklabel">XML
+                    <input type="radio" id="id-xml"name="type" value="xml">
+                    <span class="checkmark"></span>
+                </label><br>
+                <label class="checklabel">JSON
+                    <input type="radio" id="id-json" name="type" value="json">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <button id = "id-submit" type="submit"><span>Search</span></button>
+        </form>
+        
+        <div id = "id-reset"><button id = "reset-button" type="button" onclick="resetInput('id-input', 'actions')">Reset</button></div>
+            <div id = "actions">
+                <div id="id-response"> {{response[3]}}</div>
+                {% for data in response[0] %}
+                <div>
+                    <div id = "action">
+                        <div id = "action-info">
+                            <table class = "table" cellpadding = "5" cellspacing = "10" >
+                                <tr><td colspan ="2" style="text-align: center; font-size: 2.5vh;">Action {{data.index}}</td></tr>
+                                <tr><td>Id Action</td><td>{{data.id}}</td></tr>
+                                <tr><td>Label</td><td>{{data.label}}</td></tr>
+                                <tr><td>Front Label</td><td>{{data.frontLabel}}</td></tr>
+                                <tr><td>Position</td><td>{{data.position}}</td></tr>
+                                <tr><td>Priority</td><td>{{data.priority}}</td></tr>
+                                <tr><td>Begin date</td><td>{{data.beginDate}}</td></tr>
+                            </table>
+                        </div>
+                        <div id = "action-html">
+                            {{data.htmlContent | raw}}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    </div>
+</div>
+
+<script>
+let opt = {{response[2]}};
+if(opt === 0)
+    document.getElementById('id-xml').checked = true;
+if(opt === 1)
+    document.getElementById('id-json').checked = true;
+
+
+  function resetInput(input, actions){
+    document.getElementById(input).value='';
+    let element = document.getElementById(actions);
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+  }
+</script>
+{% endblock %}

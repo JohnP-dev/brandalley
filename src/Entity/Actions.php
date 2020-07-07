@@ -13,6 +13,7 @@ class Actions
     private $position;
     private $priority;
     private $beginDate;
+    private $endDate;
     private $htmlContent;
 
     /**
@@ -133,7 +134,8 @@ class Actions
      * @return void
      */
     public function setBeginDate(string $value){
-        $this->beginDate = $value;
+        if($value === null) $this->beginDate = "00/00/0000 00:00:00";
+        else $this->beginDate = $value;
     }
     /**
      * Undocumented function
@@ -144,7 +146,25 @@ class Actions
         $date = new DateTime($this->beginDate);
         return $date->format("d/m/Y H:i:s");
     }
-
+    /**
+     * Undocumented function
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setEndDate(string $value){
+        if($value === null) $this->endDate = "00/00/0000 00:00:00";
+          else $this->endDate = $value;
+    }
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getEndDate(){
+        $date = new DateTime($this->endDate);
+        return $date->format("d/m/Y H:i:s");
+    }
     /**
      * Undocumented function
      *

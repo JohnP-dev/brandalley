@@ -93,10 +93,7 @@ class Flux
         //$allActionsNodes2 = $xpath->query(".//Metadata");
         //dump($domElement->ownerDocument);
         //dump($domElement);
-        dump($allActionsNodes);
-        
-
-        
+        //dump($allActionsNodes);
         
         $i = 0;
         $datas = array();
@@ -113,17 +110,8 @@ class Flux
             $data["Position"] = $this->GetElement($xpath, $actionNode, ".//Position");
             $data["Priority"] = $this->GetElement($xpath, $actionNode, ".//Priority");
             $data["BeginDate"] =$this->GetElement($xpath, $actionNode, ".//Meta/Value[../Label/text()='BeginDate']");
-
             $data["EndDate"] = $this->GetElement($xpath, $actionNode, ".//Meta/Value[../Label/text()='EndDate']");
-
             $data["HtmlContent"] = $this->GetElement($xpath, $actionNode, ".//HtmlContent");
-            
-
-            
-            
-            
-            
-
            
                 $action = $this->createOneAction($data);
                 array_push($datas, $action);

@@ -2,6 +2,8 @@
 namespace App\Processing;
 use App\Entity\Actions;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Validator\Constraints\Length;
+
 class Flux
 {
 /**
@@ -78,28 +80,93 @@ class Flux
      * Return that list
      */
     public function filterActionsXML(string $content ){
+    
+        $content = \str_replace(" xmlns=\"Compario.FrontAPI.ContentModels\"", "", $content);
         $crawler = new Crawler();
         $crawler->addXmlContent($content);
+        
         $domElement = null;
         foreach($crawler as $domEl) $domElement = $domEl;
-        $allActionsNodes = $domElement->getElementsByTagName("Actions");
-        $i = 1;
-        $datas = array();
-        foreach($allActionsNodes as $actions){
-            $data[] = $i;
-            $data[] = $actions->getElementsByTagName("Id")[0]->nodeValue;
-            $data[] = $actions->getElementsByTagName("Label")[0]->nodeValue;
-            $data[] = $actions->getElementsByTagName("FrontLabel")[0]->nodeValue;
-            $data[] = $actions->getElementsByTagName("Position")[0]->nodeValue;
-            $data[] = $actions->getElementsByTagName("Priority")[0]->nodeValue;
-            $data[] = $actions->getElementsByTagName("Metadata")[0]->firstChild->childNodes[1]->nodeValue;
-            $data[] = $actions->getElementsByTagName("HtmlContent")[0]->nodeValue;
+        $xpath = new \DOMXpath($domElement->ownerDocument);
+        
+        $allActionsNodes = $xpath->query(".//MerchandisingAction");
+        //$allActionsNodes2 = $xpath->query(".//Metadata");
+        //dump($domElement->ownerDocument);
+        //dump($domElement);
+        dump($allActionsNodes);
+        
 
-            $action = $this->createOneAction($data);
-            array_push($datas, $action);
-            $i++;
+        
+        
+        $i = 0;
+        $datas = array();
+        
+        for($i = 0; $i < $allActionsNodes->length; $i++){
+            
+            $actionNode=$allActionsNodes->item($i);
+           
+            $data = array();
+            $data["Index"] = $i+1;
+            $data["Id"] = $this->GetElement($xpath, $actionNode, ".//Id");
+            $data["Label"] = $this->GetElement($xpath, $actionNode, ".//Label");
+            $data["FrontLabel"] = $this->GetElement($xpath, $actionNode, ".//FrontLabel");
+            $data["Position"] = $this->GetElement($xpath, $actionNode, ".//Position");
+            $data["Priority"] = $this->GetElement($xpath, $actionNode, ".//Priority");
+            $data["BeginDate"] =$this->GetElement($xpath, $actionNode, ".//Meta/Value[../Label/text()='BeginDate']");
+
+            $data["EndDate"] = $this->GetElement($xpath, $actionNode, ".//Meta/Value[../Label/text()='EndDate']");
+
+            $data["HtmlContent"] = $this->GetElement($xpath, $actionNode, ".//HtmlContent");
+            
+
+            
+            
+            
+            
+
+           
+                $action = $this->createOneAction($data);
+                array_push($datas, $action);
+            
+            }
+            return $datas;
+    }
+
+    private function GetElement($xpath, $node, $searchingPath){
+
+        $nodeList = $xpath->query($searchingPath, $node);
+        //dump($nodeList[0]);
+        // dump($nodeList);
+        return (isset($nodeList[0]))?$nodeList[0]->nodeValue:"";
+    }
+    
+    
+    
+    // Creer l'arbre du fichier XML :
+    public function drawTree($myarray, $level = 0){
+        foreach($myarray as $key => $value){
+            if (is_object($value)) $value = (array)$value;
+            if (is_array($value)) {
+                echo '<div style="padding-left: ' . ($level * 20) . 'px;">[' . $key . ']</div>';
+                $this->drawTree($value, $level + 1);
+            } else 
+                echo '<div style="padding-left: ' . ($level * 20) . 'px;">' . $key . ' = <b>' . $value . '</b></div>';
         }
-        return $datas;
+    }
+
+    //Fonction affichage recursive du XML:
+    public function recurseXmlDom($node, &$vals, $parent="") {
+        $child_count = -1; # Not realy needed.
+        $arr = array();
+        foreach ($node->childNodes as $child) {
+           // if (in_array($child->nodeName,$arr)) {
+            //         $child_count++;
+            // } else $child_count=0;
+            $arr[] = $child->nodeName;
+            $k = ($parent == "") ? $child->nodeName." " : $parent." ".$child->nodeName." ";
+            $this->recurseXmlDom($child, $vals, $k);
+            $vals[$k]= (string)$child->nodeValue;
+        }
     }
     /**
      * Undocumented function
@@ -138,14 +205,15 @@ class Flux
      */
     public function createOneAction(array $data){
         $action = new Actions();
-            $action->setIndex($data[0]);
-            $action->setId($data[1]);
-            $action->setLabel($data[2]);
-            $action->setFrontLabel($data[3]);
-            $action->setPosition($data[4]);
-            $action->setPriority($data[5]);
-            $action->setBeginDate($data[6]);
-            $action->setHtmlContent($data[7]);
+            $action->setIndex($data["Index"]);
+            $action->setId($data["Id"]);
+            $action->setLabel($data["Label"]);
+            $action->setFrontLabel($data["FrontLabel"]);
+            $action->setPosition($data["Position"]);
+            $action->setPriority($data["Priority"]);
+            $action->setBeginDate($data["BeginDate"]);
+            $action->setendDate($data["EndDate"]);
+            $action->setHtmlContent($data["HtmlContent"]);
         return $action;
     }
     /**

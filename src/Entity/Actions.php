@@ -153,8 +153,7 @@ class Actions
      * @return void
      */
     public function setEndDate(string $value){
-        if($value === null) $this->endDate = "00/00/0000 00:00:00";
-          else $this->endDate = $value;
+        $this->endDate = $value;
     }
     /**
      * Undocumented function
@@ -162,7 +161,12 @@ class Actions
      * @return string
      */
     public function getEndDate(){
+        if( $this->endDate == "" ){
+            return "";
+        }
+        
         $date = new DateTime($this->endDate);
+        
         return $date->format("d/m/Y H:i:s");
     }
     /**

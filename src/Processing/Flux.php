@@ -68,7 +68,9 @@ class Flux
         }
         return $url;
     }
-   
+    
+
+    
     /**
      * Undocumented function
      *
@@ -84,52 +86,31 @@ class Flux
         $content = \str_replace(" xmlns=\"Compario.FrontAPI.ContentModels\"", "", $content);
         $crawler = new Crawler();
         $crawler->addXmlContent($content);
-        
-        $domElement = null;
-        foreach($crawler as $domEl) $domElement = $domEl;
-        $xpath = new \DOMXpath($domElement->ownerDocument);
-        
-        $allActionsNodes = $xpath->query(".//MerchandisingAction");
-        //$allActionsNodes2 = $xpath->query(".//Metadata");
-        //dump($domElement->ownerDocument);
-        //dump($domElement);
-        //dump($allActionsNodes);
-        
-        $i = 0;
-        $datas = array();
-        
-        for($i = 0; $i < $allActionsNodes->length; $i++){
-            
-            $actionNode=$allActionsNodes->item($i);
-           
-            $data = array();
-            $data["Index"] = $i+1;
-            $data["Id"] = $this->GetElement($xpath, $actionNode, ".//Id");
-            $data["Label"] = $this->GetElement($xpath, $actionNode, ".//Label");
-            $data["FrontLabel"] = $this->GetElement($xpath, $actionNode, ".//FrontLabel");
-            $data["Position"] = $this->GetElement($xpath, $actionNode, ".//Position");
-            $data["Priority"] = $this->GetElement($xpath, $actionNode, ".//Priority");
-            $data["BeginDate"] =$this->GetElement($xpath, $actionNode, ".//Meta/Value[../Label/text()='BeginDate']");
-            $data["EndDate"] = $this->GetElement($xpath, $actionNode, ".//Meta/Value[../Label/text()='EndDate']");
-            $data["HtmlContent"] = $this->GetElement($xpath, $actionNode, ".//HtmlContent");
-           
-                $action = $this->createOneAction($data);
-                array_push($datas, $action);
-            
-            }
-            return $datas;
-    }
 
-    private function GetElement($xpath, $node, $searchingPath){
+                            
+        $crawlerMerchandisings = $crawler->filterXPath('//Actions/MerchandisingAction')->each(function (Crawler $node, $i) {
+            
+            $nodeId = $node->children()->filter('Id')->text();
+            $nodeLabel = $node->children()->filter('Label')->text();
+            $nodeFrontLabel = $node->children()->filter('FrontLabel')->text();
+            $nodePosition = $node->children()->filter('Position')->text();
+            $nodePriority = $node->children()->filter('Priority')->text();
+            $nodeBeginDate = $node->children()->filterXPath(".//Meta/Value[../Label/text()='BeginDate']")->text();
+            $nodeEndDate = $node->children()->filterXPath(".//Meta/Value[../Label/text()='EndDate']")->text("");
+            dump($nodeEndDate);
+            $nodeHtmlContent = $node->children()->filter('HtmlContent')->text();
+        
+            return $this->createOneAction (array('Index'=> $i,'Id'=>$nodeId, 'Label'=>$nodeLabel, 'FrontLabel'=>$nodeFrontLabel, 'Position'=>$nodePosition, 'Priority'=>$nodePriority, 'BeginDate'=>$nodeBeginDate, 'EndDate'=>$nodeEndDate, 'HtmlContent'=>$nodeHtmlContent)) ;
+            
+            
+        });
+       //dump($crawlerMerchandisings);
+        //return $crawlerMerchandisings;
+       
+        return $crawlerMerchandisings;
 
-        $nodeList = $xpath->query($searchingPath, $node);
-        //dump($nodeList[0]);
-        // dump($nodeList);
-        return (isset($nodeList[0]))?$nodeList[0]->nodeValue:"";
-    }
-    
-    
-    
+    } 
+        
     // Creer l'arbre du fichier XML :
     public function drawTree($myarray, $level = 0){
         foreach($myarray as $key => $value){
@@ -200,7 +181,7 @@ class Flux
             $action->setPosition($data["Position"]);
             $action->setPriority($data["Priority"]);
             $action->setBeginDate($data["BeginDate"]);
-            $action->setendDate($data["EndDate"]);
+            $action->setEndDate($data["EndDate"]);
             $action->setHtmlContent($data["HtmlContent"]);
         return $action;
     }

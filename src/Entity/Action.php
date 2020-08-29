@@ -4,7 +4,7 @@ use \DateTime;
 /**
  * CLass to store properties on MarchandesignActions
  */
-class Actions
+class Action
 {
     private $index;
     private $id;
@@ -61,7 +61,7 @@ class Actions
      * @return void
      */
     public function setLabel(string $value){
-        $this->label = $value;
+        $this->label = $value . $this->index;
     }
 
     /**
@@ -101,6 +101,7 @@ class Actions
     public function setPosition(string $value){
         $this->position = $value;
     }
+    
     /**
      * Undocumented function
      *
@@ -119,6 +120,7 @@ class Actions
     public function setPriority(string $value){
         $this->priority = $value;
     }
+
     /**
      * Undocumented function
      *
@@ -127,6 +129,7 @@ class Actions
     public function getPriority(){
         return $this->priority;
     }
+
     /**
      * Undocumented function
      *
@@ -137,6 +140,7 @@ class Actions
         if($value === null) $this->beginDate = "00/00/0000 00:00:00";
         else $this->beginDate = $value;
     }
+
     /**
      * Undocumented function
      *
@@ -146,12 +150,14 @@ class Actions
         $date = new DateTime($this->beginDate);
         return $date->format("d/m/Y H:i:s");
     }
+
     /**
      * Undocumented function
      *
      * @param string $value
      * @return void
      */
+
     public function setEndDate(string $value){
         $this->endDate = $value;
     }
@@ -160,6 +166,7 @@ class Actions
      *
      * @return string
      */
+
     public function getEndDate(){
         if( $this->endDate == "" ){
             return "";
@@ -169,6 +176,7 @@ class Actions
         
         return $date->format("d/m/Y H:i:s");
     }
+
     /**
      * Undocumented function
      *
@@ -178,6 +186,7 @@ class Actions
     public function setHtmlContent(string $value){
         $this->htmlContent = $value;
     }
+
     /**
      * Undocumented function
      *

@@ -4,7 +4,7 @@ use \DateTime;
 /**
  * CLass to store properties on MarchandesignActions
  */
-class Actions
+class Action
 {
     private $index;
     private $id;
@@ -13,6 +13,7 @@ class Actions
     private $position;
     private $priority;
     private $beginDate;
+    private $endDate;
     private $htmlContent;
 
     /**
@@ -60,7 +61,7 @@ class Actions
      * @return void
      */
     public function setLabel(string $value){
-        $this->label = $value;
+        $this->label = $value . $this->index;
     }
 
     /**
@@ -100,6 +101,7 @@ class Actions
     public function setPosition(string $value){
         $this->position = $value;
     }
+    
     /**
      * Undocumented function
      *
@@ -118,6 +120,7 @@ class Actions
     public function setPriority(string $value){
         $this->priority = $value;
     }
+
     /**
      * Undocumented function
      *
@@ -126,6 +129,7 @@ class Actions
     public function getPriority(){
         return $this->priority;
     }
+
     /**
      * Undocumented function
      *
@@ -133,8 +137,10 @@ class Actions
      * @return void
      */
     public function setBeginDate(string $value){
-        $this->beginDate = $value;
+        if($value === null) $this->beginDate = "00/00/0000 00:00:00";
+        else $this->beginDate = $value;
     }
+
     /**
      * Undocumented function
      *
@@ -151,9 +157,36 @@ class Actions
      * @param string $value
      * @return void
      */
+
+    public function setEndDate(string $value){
+        $this->endDate = $value;
+    }
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+
+    public function getEndDate(){
+        if( $this->endDate == "" ){
+            return "";
+        }
+        
+        $date = new DateTime($this->endDate);
+        
+        return $date->format("d/m/Y H:i:s");
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $value
+     * @return void
+     */
     public function setHtmlContent(string $value){
         $this->htmlContent = $value;
     }
+
     /**
      * Undocumented function
      *
